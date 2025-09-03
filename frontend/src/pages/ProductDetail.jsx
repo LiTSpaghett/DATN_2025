@@ -75,23 +75,6 @@ export default function ProductDetail({ fetchCart }) {
           // alt={product.name}
           className="max-h-full max-w-full object-contain"
         />
-
-        {/* Thumbnail khi có nhiều ảnh */}
-        {/* {product.images && product.images.length > 0 && (
-          <div className="flex gap-2">
-            {product.images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${product.name}-${idx}`}
-                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${
-                  img === selectedImage ? "border-pink-500" : "border-gray-200"
-                }`}
-                onClick={() => setSelectedImage(img)}
-              />
-            ))}
-          </div>
-        )} */}
       </div>
 
       {/* Thông tin sản phẩm */}

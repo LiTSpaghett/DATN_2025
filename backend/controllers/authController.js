@@ -2,31 +2,25 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-// Tạo token JWT
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
 
-// @desc    Đăng ký user
-// @route   POST /api/auth/register
-// @access  Public
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check đã tồn tại user chưa
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "Email đã được sử dụng" });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Tạo user mới
     const user = await User.create({
       name,
       email,
@@ -48,9 +42,7 @@ export const register = async (req, res) => {
   }
 };
 
-// @desc    Đăng nhập user
-// @route   POST /api/auth/login
-// @access  Public
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -74,9 +66,6 @@ export const login = async (req, res) => {
   }
 };
 
-// @desc    Lấy thông tin profile user
-// @route   GET /api/auth/profile
-// @access  Private
 export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");

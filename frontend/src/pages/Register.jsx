@@ -20,10 +20,8 @@ export default function Register() {
         password,
       });
 
-      // Lưu thông tin user vào localStorage
       localStorage.setItem("userInfo", JSON.stringify(data));
 
-      // Sau khi đăng ký thành công, chuyển hướng sang home (hoặc login tùy ý)
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Đăng ký thất bại, thử lại!");

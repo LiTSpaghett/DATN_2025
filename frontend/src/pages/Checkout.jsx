@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -26,12 +27,12 @@ export default function CheckoutPage() {
 
       alert("Đặt hàng thành công!");
       console.log("Order:", data);
-
-      // Reset form
-      setFullName("");
-      setPhone("");
-      setAddress("");
-      setCity("");
+      // // Reset form
+      // setFullName("");
+      // setPhone("");
+      // setAddress("");
+      // setCity("");
+      navigate("/orderTracking");
     } catch (err) {
       console.error(err);
       alert("Đặt hàng thất bại");

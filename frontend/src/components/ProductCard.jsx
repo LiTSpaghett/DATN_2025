@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
-  // Lấy ảnh đầu tiên trong mảng images
   const productImage = product.images?.[0] || "placeholder.jpg";
 
   const handleAddToCart = async () => {
@@ -18,7 +17,6 @@ export default function ProductCard({ product }) {
         return;
       }
 
-      // Nếu sản phẩm có nhiều size, chọn mặc định size đầu tiên
       const defaultSize = product.stock?.[0]?.size;
       if (!defaultSize) {
         alert("Sản phẩm này hiện không có size sẵn");
@@ -43,7 +41,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <motion.div whileHover={{ y: -6 }} className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+    <motion.div whileHover={{ y: -6 }} className="product-card bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
       <div className="relative cursor-pointer" onClick={goToDetail}>
         <img src={`http://localhost:5000/${productImage}`} alt={product.name} className="w-full h-72 object-cover" />
         <div className="absolute top-3 left-3 bg-white/80 text-sm text-pink-600 px-2 py-1 rounded">Mới</div>

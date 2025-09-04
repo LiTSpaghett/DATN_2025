@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+
 export default function CartPage() {
+  
   const [cartItems, setCartItems] = useState([]);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -95,7 +97,7 @@ export default function CartPage() {
                   className="flex items-center gap-4 bg-white p-4 rounded-lg shadow"
                 >
                   <img
-                    src={item.product.images?.[0]}
+                     src={`http://localhost:5000/${item.product.images[0].replace(/\\/g, "/")}`}
                     alt={item.product.name}
                     className="w-24 h-28 object-cover rounded"
                   />

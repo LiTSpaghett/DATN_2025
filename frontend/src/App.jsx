@@ -59,25 +59,7 @@ export default function App() {
 
   return (
     <Router>
-      {/* <div className="min-h-screen"> */}
-        {/* <Header cartCount={cartCount} /> */}
-        {/* <main className="max-w-7xl mx-auto py-8 px-4"> */}
           <Routes>
-            {/* <Route path="/" element={<Home />} />
-            <Route
-              path="/shop"
-              element={<Shop addToCart={addToCart} products={products} />}
-            />
-            <Route
-              path="/cart"
-              element={
-                <CartPage
-                  cartItems={cart}
-                  updateQuantity={updateQuantity}
-                  removeFromCart={removeFromCart}
-                />
-              }
-            /> */}
              <Route
           path="/*"
           element={

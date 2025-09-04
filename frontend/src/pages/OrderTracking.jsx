@@ -20,7 +20,6 @@ export default function OrderTracking() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
 
-        // backend trả array trực tiếp
         setOrders(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.response?.data?.message || err.message);

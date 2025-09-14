@@ -6,7 +6,7 @@ describe("📦 Quản lý sản phẩm (Admin)", () => {
    cy.get('input[type="email"]').type("admin@example.com");
     cy.get('input[type="password"]').type("123456");
     cy.get('button[type="submit"]').click();
-    // Sau đó vào trang quản lý sản phẩm
+  
     cy.window().its("localStorage.userInfo").should("exist");
     cy.visit("http://localhost:5173/admin/products");
   });

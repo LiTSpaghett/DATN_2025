@@ -6,12 +6,6 @@ import CartPage from "./pages/Cart";
 import Header from "./components/Header";
 import CheckoutPage from "./pages/Checkout";
 import OrderTracking from "./pages/OrderTracking";
-import AdminRoute from "./components/AdminRoute";
-import AdminLayout from "./pages/admin/AdminLayout"; 
-import Dashboard from "./pages/admin/Dashboard";
-import Products from "./pages/admin/Products";
-import Orders from "./pages/admin/Orders";
-import Users from "./pages/admin/Users";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductDetail from "./pages/ProductDetail";
@@ -89,14 +83,6 @@ export default function App() {
             </div>
           }
         />
-            <Route path="/admin" element={<AdminRoute />}>
-              <Route element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="products" element={<Products />} />
-                <Route path="orders" element={<Orders />} />
-                <Route path="users" element={<Users />} />
-              </Route>
-            </Route>
           </Routes>
         {/* </main> */}
       {/* </div> */}

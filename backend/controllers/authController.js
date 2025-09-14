@@ -50,7 +50,7 @@ export const login = async (req, res) => {
     // Tìm user
     const user = await User.findOne({ email });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && !user.isAdmin && (await bcrypt.compare(password, user.password))) {
       res.json({
         _id: user._id,
         name: user.name,
@@ -79,3 +79,5 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+

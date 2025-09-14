@@ -2,7 +2,7 @@
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 
-// 📌 Tạo đơn hàng từ giỏ hàng
+// Tạo đơn hàng từ giỏ hàng
 export const createOrder = async (req, res) => {
   try {
     const { shippingAddress } = req.body;
@@ -41,7 +41,7 @@ export const createOrder = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-// 📌 Lấy đơn hàng của user
+// Lấy đơn hàng của user
 export const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id })
@@ -52,7 +52,7 @@ export const getMyOrders = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-// 📌 Admin: Lấy tất cả đơn hàng
+// Admin: Lấy tất cả đơn hàng
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
@@ -65,7 +65,7 @@ export const getAllOrders = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-// 📌 Admin: Cập nhật trạng thái
+// Admin: Cập nhật trạng thái
 export const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -74,7 +74,7 @@ export const updateOrderStatus = async (req, res) => {
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
 
-    const validStatuses = ["pending", "confirmed", "shipping", "delivered", "cancelled"];
+    const validStatuses = ["Chờ xử lý", "Đã xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Trạng thái không hợp lệ" });
     }

@@ -27,11 +27,6 @@ export default function CheckoutPage() {
 
       alert("Đặt hàng thành công!");
       console.log("Order:", data);
-      // // Reset form
-      // setFullName("");
-      // setPhone("");
-      // setAddress("");
-      // setCity("");
       navigate("/orderTracking");
     } catch (err) {
       console.error(err);

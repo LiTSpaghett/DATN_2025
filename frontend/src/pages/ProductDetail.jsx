@@ -15,11 +15,9 @@ export default function ProductDetail({ fetchCart }) {
         const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
         setProduct(data);
 
-        // Ưu tiên lấy từ images array
         if (data.images && data.images.length > 0) {
           setSelectedImage(data.images[0]);
         }
-        // Nếu chỉ có image string
         else if (data.image) {
           setSelectedImage(data.image);
         }
@@ -32,10 +30,8 @@ export default function ProductDetail({ fetchCart }) {
 
   if (!product) return <div>Đang tải...</div>;
 
-  // Lọc size còn hàng
   const availableSizes = product.stock?.filter(s => s.quantity > 0) || [];
 
-  // Thêm vào cart
   const handleAddToCart = async () => {
     if (!userInfo) {
       alert("Vui lòng đăng nhập để thêm vào giỏ hàng");
@@ -59,7 +55,7 @@ export default function ProductDetail({ fetchCart }) {
         }
       );
       alert("Đã thêm vào giỏ hàng");
-      fetchCart?.(); // cập nhật lại CartPage nếu có
+      fetchCart?.(); 
     } catch (err) {
       console.error(err);
       alert("Thêm vào giỏ hàng thất bại");
@@ -100,7 +96,7 @@ export default function ProductDetail({ fetchCart }) {
                     }`}
                     onClick={() => setSelectedSize(s.size)}
                   >
-                    {s.size} ({s.quantity})
+                    {s.size}
                   </button>
                 ))
               ) : (

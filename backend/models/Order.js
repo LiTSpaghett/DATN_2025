@@ -20,8 +20,8 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "shipping", "delivered", "cancelled"],
-      default: "pending",
+      enum: ["Chờ xử lý", "Đã xác nhận", "Đang giao", "Đã giao", "Đã hủy"],
+      default: "Chờ xử lý",
     },
   },
   { timestamps: true }

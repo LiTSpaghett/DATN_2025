@@ -148,7 +148,7 @@ export default function CartPage() {
     to="/checkout"
     className="block text-center w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
   >
-    Thanh toán
+    Đặt hàng
   </Link>
           </aside>
         </div>

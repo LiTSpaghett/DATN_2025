@@ -10,8 +10,9 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import  productRoutes  from "./routes/productRoutes.js";
 import  orderRoutes from "./routes/orderRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
+// import uploadRoutes from "./routes/uploadRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import adminAuthRoutes from "./routes/adminAuthRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -30,7 +31,6 @@ app.use((req, res, next) => {
 // static serve upload folder
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 
@@ -38,9 +38,9 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/upload", uploadRoutes);
 app.use('/api/cart', cartRoutes);
-
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/chat", (await import("./routes/chatRoutes.js")).default); 
 // error handler
 app.use(notFound);
 app.use(errorHandler);

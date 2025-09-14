@@ -6,7 +6,8 @@ const productSchema = new mongoose.Schema(
     description: { type: String },
     price: { type: Number, required: true },
     category: { type: String, required: true },
-    colors: [{ type: String }], // ["Red", "Blue"]
+    subcategory: { type: String, required: true },
+    colors: {type: String, required: true},
     images: [{ type: String }],
     stock: [
       {
@@ -14,9 +15,9 @@ const productSchema = new mongoose.Schema(
         quantity: { type: Number, default: 0 }   // số lượng cho size đó
       }
     ],
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    weaviateId: { type: String },
   },
+  
   { timestamps: true }
 );
 

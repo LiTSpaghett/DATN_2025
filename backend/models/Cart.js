@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const cartItemSchema = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product", // tham chiếu đến collection Product
+    ref: "Product",
     required: true,
   },
   quantity: {
@@ -13,11 +13,11 @@ const cartItemSchema = new mongoose.Schema({
     default: 1,
   },
   size: {
-    type: String, // ví dụ "S", "M", "L", "XL"
+    type: String,
     required: true,
   },
   color: {
-    type: String, // nếu muốn lưu màu sắc
+    type: String,
   },
 });
 
@@ -28,9 +28,9 @@ const cartSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      unique: true, // mỗi user chỉ có 1 giỏ
+      unique: true, 
     },
-    items: [cartItemSchema], // mảng các sản phẩm
+    items: [cartItemSchema], 
   },
   { timestamps: true }
 );

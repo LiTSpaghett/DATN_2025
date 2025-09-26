@@ -4,12 +4,13 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import CartPage from "./pages/Cart";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import CheckoutPage from "./pages/Checkout";
 import OrderTracking from "./pages/OrderTracking";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductDetail from "./pages/ProductDetail";
-
+import Profile from "./pages/Profile";
 
 const STORAGE_KEY = "shop_cart_v1";
 
@@ -52,40 +53,48 @@ export default function App() {
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
 
   return (
-    <Router>
-          <Routes>
-             <Route
-          path="/*"
-          element={
-            <div className="min-h-screen">
-              <Header cartCount={cartCount} />
-              <main className="max-w-7xl mx-auto py-8 px-4">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/product/:id" element={<ProductDetail addToCart={addToCart} />} />
-                  <Route
-              path="/cart"
-              element={
-                <CartPage
-                  cartItems={cart}
-                  updateQuantity={updateQuantity}
-                  removeFromCart={removeFromCart}
+<Router>
+  <Routes>
+    <Route
+      path="/*"
+      element={
+        <div className="min-h-screen flex flex-col">
+          <Header cartCount={cartCount} />
+
+          {/* Nội dung chính chiếm hết chiều cao còn lại */}
+          <main className="flex-1">
+            <div className="max-w-7xl mx-auto py-8 px-4">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/product/:id" element={<ProductDetail addToCart={addToCart} />} />
+                <Route
+                  path="/cart"
+                  element={
+                    <CartPage
+                      cartItems={cart}
+                      updateQuantity={updateQuantity}
+                      removeFromCart={removeFromCart}
+                    />
+                  }
                 />
-              }
-             />
-             <Route path="/Login" element={<Login />} />
-             <Route path="/Register" element={<Register />} />
-             <Route path="/checkout" element={<CheckoutPage cartItems={cart} setCart={setCart} />} />
-              <Route path="/ordertracking" element={<OrderTracking />} />
-                </Routes>
-              </main>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/checkout" element={<CheckoutPage cartItems={cart} setCart={setCart} />} />
+                <Route path="/ordertracking" element={<OrderTracking />} />
+                <Route path="/profile" element={<Profile />} />
+              </Routes>
             </div>
-          }
-        />
-          </Routes>
-        {/* </main> */}
-      {/* </div> */}
-    </Router>
+          </main>
+
+          {/* Footer LUÔN ở ngoài main, full width */}
+          <Footer />
+        </div>
+      }
+    />
+  </Routes>
+</Router>
+
+
   );
 }

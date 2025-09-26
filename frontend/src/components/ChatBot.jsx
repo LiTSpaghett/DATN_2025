@@ -50,7 +50,7 @@ export default function Chatbot({ onClose }) {
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[550px] bg-white border rounded-lg shadow-lg flex flex-col">
       {/* Header */}
-      <div className="bg-blue-500 text-white p-3 rounded-t-lg font-bold flex justify-between items-center">
+      <div className="bg-pink-500 text-white p-3 rounded-t-lg font-bold flex justify-between items-center">
         <span>🤖 Chatbot</span>
         <button onClick={onClose} className="hover:text-gray-200">
           <X size={20} />

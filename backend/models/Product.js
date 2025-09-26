@@ -11,8 +11,8 @@ const productSchema = new mongoose.Schema(
     images: [{ type: String }],
     stock: [
       {
-        size: { type: String, required: true },   // S, M, L, XL
-        quantity: { type: Number, default: 0 }   // số lượng cho size đó
+        size: { type: String, required: true },   
+        quantity: { type: Number, default: 0 }   
       }
     ],
     weaviateId: { type: String },

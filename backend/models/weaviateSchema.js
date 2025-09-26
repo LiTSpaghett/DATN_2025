@@ -27,7 +27,7 @@ async function createProductSchema() {
         },
         {
           name: "colors",
-          dataType: ["text"], // mảng màu
+          dataType: ["text"], 
         },
         {
           name: "price",
@@ -35,7 +35,7 @@ async function createProductSchema() {
         },
         {
           name: "stock",
-          dataType: ["text[]"], // vì Mongo là object, ta convert thành string
+          dataType: ["text[]"], 
         },
       ],
     };

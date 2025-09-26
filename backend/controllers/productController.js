@@ -12,7 +12,7 @@ async function initWeaviateSchema() {
         .classCreator()
         .withClass({
           class: "Product",
-          vectorizer: "text2vec-openai", // 👈 match với docker-compose
+          vectorizer: "text2vec-openai", 
           properties: [
             { name: "name", dataType: ["text"] },
             { name: "description", dataType: ["text"] },
@@ -33,8 +33,7 @@ async function initWeaviateSchema() {
 // Gọi init khi load controller
 initWeaviateSchema();
 
-// Lấy tất cả sản phẩm
-// GET /api/products?page=1&limit=8&search=...&category=...
+// Lấy tất cả sản phẩm với tìm kiếm, lọc, phân trang
 export const getAllProducts = async (req, res) => {
   try {
     const { search, category, page = 1, limit = 8 } = req.query;
@@ -80,7 +79,7 @@ export const getProductById = async (req, res) => {
   }
 };
 
-// 🟢 Hàm helper convert dữ liệu sang dạng Weaviate accept
+// convert dữ liệu sang dạng Weaviate accept
 const toWeaviateProps = (product) => ({
    name: product.name,
   description: product.description || "",

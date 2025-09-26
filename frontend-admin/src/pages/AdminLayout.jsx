@@ -12,10 +12,10 @@ const AdminLayout = () => {
   };
 
   const menu = [
-    { to: "/admin", label: "📊 Dashboard" },
-    { to: "/admin/products", label: "📦 Products" },
-    { to: "/admin/orders", label: "📝 Orders" },
-    { to: "/admin/users", label: "👤 Users" },
+    { to: "/", label: "📊 Dashboard" },
+    { to: "/products", label: "📦 Sản phẩm" },
+    { to: "/orders", label: "📝 Đơn hàng" },
+    { to: "/users", label: "👤 Người dùng" },
   ];
 
   return (

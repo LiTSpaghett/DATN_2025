@@ -23,8 +23,8 @@ export default function Header({ cartCount = 0 }) {
         </Link>
 
         <nav className="flex items-center gap-6">
-          <NavLink to="/" className={({isActive}) => isActive ? 'text-pink-600 font-semibold' : 'text-gray-700'}>Home</NavLink>
-          <NavLink to="/shop" className={({isActive}) => isActive ? 'text-pink-600 font-semibold' : 'text-gray-700'}>Shop</NavLink>
+          <NavLink to="/" className={({isActive}) => isActive ? 'text-pink-600 font-semibold' : 'text-gray-700'}>Trang chủ</NavLink>
+          <NavLink to="/shop" className={({isActive}) => isActive ? 'text-pink-600 font-semibold' : 'text-gray-700'}>Cửa hàng</NavLink>
           <Link to="/cart" className="relative inline-flex items-center gap-2 px-3 py-2 rounded-md bg-pink-50 hover:bg-pink-100">
             <ShoppingCartIcon className="w-5 h-5 text-pink-600" />
             <span className="text-sm font-medium text-pink-700">Giỏ hàng</span>
@@ -40,7 +40,7 @@ export default function Header({ cartCount = 0 }) {
                 onClick={handleLogout}
                 className="px-4 py-2 rounded-md bg-pink-600 text-white font-medium hover:bg-pink-700 transition"
               >
-                Logout
+                Đăng xuất
               </button>
             </div>
           ) : (

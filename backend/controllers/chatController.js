@@ -9,12 +9,12 @@ const openai = new OpenAI({
 // Detect category via keyword first
 async function detectCategorySubColorPrice(message) {
   try {
-    // 🟢 Gọi API filters từ backend
+    //  Gọi API filters từ backend
     const { data: filters } = await axios.get("http://localhost:5000/api/products/filters");
 
     const { categories, subcategories, colors, minPrice, maxPrice } = filters;
 
-    // 🟢 Build prompt động
+    // Build prompt động
     const prompt = `
 Người dùng vừa hỏi: "${message}".
 
@@ -35,7 +35,7 @@ Chỉ trả về JSON đúng format:
 {"category": null, "subcategory": null, "color": null, "minPrice": null, "maxPrice": null}
     `;
 
-    // 🟢 Gọi GPT detect
+    //  Gọi GPT detect
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],

@@ -13,6 +13,8 @@ import  orderRoutes from "./routes/orderRoutes.js";
 // import uploadRoutes from "./routes/uploadRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import adminAuthRoutes from "./routes/adminAuthRoutes.js";
+import statsRoutes from "./routes/statsRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -40,10 +42,12 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin/stats", statsRoutes);
+app.use("/api/payments", paymentRoutes);
 app.use("/api/chat", (await import("./routes/chatRoutes.js")).default); 
 // error handler
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

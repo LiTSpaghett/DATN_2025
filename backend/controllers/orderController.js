@@ -1,57 +1,85 @@
-// controllers/orderController.js
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 
-// Tạo đơn hàng từ giỏ hàng
+const ALLOWED_METHODS = ["COD", "MOMO"];
+
 export const createOrder = async (req, res) => {
   try {
-    const { shippingAddress } = req.body;
+    const { shippingAddress, paymentMethod = "COD" } = req.body || {};
 
+    // Validate địa chỉ
+    if (
+      !shippingAddress ||
+      !shippingAddress.fullName ||
+      !shippingAddress.phone ||
+      !shippingAddress.address ||
+      !shippingAddress.city
+    ) {
+      return res.status(400).json({ message: "Thiếu thông tin địa chỉ giao hàng" });
+    }
+
+    // Validate method
+    if (!ALLOWED_METHODS.includes(paymentMethod)) {
+      return res.status(400).json({ message: "Phương thức thanh toán không hợp lệ" });
+    }
+
+    // Lấy giỏ hàng của user
     const cart = await Cart.findOne({ user: req.user._id }).populate("items.product");
-
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: "Giỏ hàng trống" });
     }
 
+    // Chụp snapshot items
     const orderItems = cart.items.map((item) => ({
-      product: item.product._id,   // chỉ lưu productId
+      product: item.product._id,  // chỉ lưu productId
       quantity: item.quantity,
       size: item.size || null,
-      price: item.product.price,
+      price: item.product.price,  // snapshot giá tại thời điểm đặt
     }));
 
-    const totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    // Tính tổng
+    const totalPrice = orderItems.reduce((sum, it) => sum + it.price * it.quantity, 0);
 
+    // Thiết lập trạng thái thanh toán ban đầu theo phương thức
+    const initialPaymentStatus = paymentMethod === "MOMO" ? "pending" : "unpaid";
+
+    // Tạo order
     const order = new Order({
       user: req.user._id,
       shippingAddress,
       orderItems,
       totalPrice,
+      paymentMethod,            // ví dụ: COD/MOMO
+      paymentStatus: initialPaymentStatus, // 'pending' nếu MOMO, 'unpaid' nếu COD
+      // transactionId/payedAt/paymentInfo sẽ được cập nhật sau (IPN/return)
     });
 
     await order.save();
 
-    // Xoá giỏ hàng sau khi đặt hàng
+    // Xoá sạch giỏ hàng sau khi tạo đơn
     cart.items = [];
     await cart.save();
 
-    res.status(201).json(order);
+    return res.status(201).json(order);
   } catch (err) {
     console.error("Order create error:", err);
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
+
 // Lấy đơn hàng của user
 export const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id })
       .populate("orderItems.product", "name image price")
       .sort({ createdAt: -1 });
-    res.json(orders);
+
+    return res.json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
+
 // Admin: Lấy tất cả đơn hàng
 export const getAllOrders = async (req, res) => {
   try {
@@ -60,30 +88,31 @@ export const getAllOrders = async (req, res) => {
       .populate("orderItems.product", "name image price")
       .sort({ createdAt: -1 });
 
-    res.json(orders);
+    return res.json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
-// Admin: Cập nhật trạng thái
+
+// Admin: Cập nhật trạng thái logistics (không phải thanh toán)
 export const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-
-    const order = await Order.findById(id);
-    if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
 
     const validStatuses = ["Chờ xử lý", "Đã xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Trạng thái không hợp lệ" });
     }
 
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+
     order.status = status;
     await order.save();
 
-    res.json({ message: "Cập nhật trạng thái thành công", order });
+    return res.json({ message: "Cập nhật trạng thái thành công", order });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };

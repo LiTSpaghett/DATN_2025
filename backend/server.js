@@ -10,7 +10,6 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import  productRoutes  from "./routes/productRoutes.js";
 import  orderRoutes from "./routes/orderRoutes.js";
-// import uploadRoutes from "./routes/uploadRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import adminAuthRoutes from "./routes/adminAuthRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
@@ -27,7 +26,7 @@ app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 app.use((req, res, next) => {
-  res.set("Cache-Control", "no-store"); // luôn trả về dữ liệu mới
+  res.set("Cache-Control", "no-store");
   next();
 });
 // static serve upload folder

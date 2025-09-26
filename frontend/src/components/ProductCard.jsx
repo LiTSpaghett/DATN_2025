@@ -46,12 +46,6 @@ export default function ProductCard({ product }) {
         <img src={`http://localhost:5000/${productImage}`} alt={product.name} className="w-full h-72 object-cover" />
         <div className="absolute top-3 left-3 bg-white/80 text-sm text-pink-600 px-2 py-1 rounded">Mới</div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition flex items-end justify-center p-4">
-          {/* <button
-            onClick={(e) => { e.stopPropagation(); handleAddToCart(); }}
-            className="bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg"
-          >
-            Thêm vào giỏ
-          </button> */}
         </div>
       </div>
       <div className="p-4 flex-1 flex flex-col justify-between">

@@ -4,7 +4,6 @@ import axios from "axios";
 export default function Orders() {
   const [orders, setOrders] = useState([]);
 
-  // Lấy tất cả đơn hàng
   const fetchOrders = async () => {
     try {
       const { data } = await axios.get("http://localhost:5000/api/orders"); 
@@ -18,13 +17,12 @@ export default function Orders() {
     fetchOrders();
   }, []);
 
-  // Cập nhật trạng thái
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, {
         status: newStatus,
       });
-      fetchOrders(); // reload lại sau khi cập nhật
+      fetchOrders(); 
     } catch (err) {
       console.error("Update status error:", err);
     }

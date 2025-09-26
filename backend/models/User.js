@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
 }, { timestamps: true });
 
-// Hàm so sánh password khi login
 userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

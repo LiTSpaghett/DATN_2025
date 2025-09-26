@@ -1,14 +1,12 @@
-// controllers/adminStatsController.js
 import Order from "../models/Order.js";
-// import Product from "../models/Product.js";
-// import User from "../models/User.js";
+
 
 function parseRangeDays(range = "30d") {
   const m = String(range).match(/^(\d+)\s*d$/i);
   return m ? Math.max(1, parseInt(m[1], 10)) : 30;
 }
 
-// --- helpers tính from/to theo timezone ---
+
 function _partsInTZ(date, tz) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit",
@@ -28,21 +26,21 @@ function endOfDayInTZ(date, tz) {
 
 function getRangeBounds(days, tz = "Asia/Ho_Chi_Minh") {
   const today = new Date();
-  const to = endOfDayInTZ(today, tz);                       // cuối NGÀY HÔM NAY theo VN
+  const to = endOfDayInTZ(today, tz);                       
   const startBase = new Date(today.getTime() - (days - 1) * 86400000);
-  const from = startOfDayInTZ(startBase, tz);               // đầu ngày (today - days + 1)
+  const from = startOfDayInTZ(startBase, tz);               
   return { from, to };
 }
 
-// key YYYY-MM-DD theo đúng timezone, KHÔNG dùng toISOString()
+
 function _dateKeyInTZ(date, tz) {
   return new Intl.DateTimeFormat("sv-SE", {
     timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit",
-  }).format(date); // "YYYY-MM-DD"
+  }).format(date); 
 }
 
 function padDaysSeries(series, from, to, tz = "Asia/Ho_Chi_Minh") {
-  const map = new Map(series.map((x) => [x._id, x])); // _id đã là YYYY-MM-DD theo tz
+  const map = new Map(series.map((x) => [x._id, x])); 
   const out = [];
   const cur = new Date(from);
   while (cur <= to) {
@@ -195,10 +193,10 @@ export const getAdminStatsAll = async (req, res) => {
         revenueByDay: padDaysSeries(byDay, from, to,tz),
         topDays,
       },
-      topProducts,       // [{ productId, name, category, revenue, quantity, orders }]
-      topCustomers,      // [{ userId, name, email, revenue, orders }]
-      statusFunnel,      // [{ _id: status, count, revenue }]
-      categoryBreakdown, // [{ _id: category, revenue, quantity, orders }]
+      topProducts,       
+      topCustomers,     
+      statusFunnel,      
+      categoryBreakdown, 
       meta: { rangeDays: days, tz, from, to },
     });
   } catch (err) {

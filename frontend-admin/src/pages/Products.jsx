@@ -8,14 +8,14 @@ const Products = () => {
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 📌 State phân trang
+  
   const [page, setPage] = useState(1);
-  const limit = 10; // 10 sản phẩm mỗi trang
+  const limit = 10; 
 
  const fetchProducts = async () => {
   try {
     const { data } = await axios.get("http://localhost:5000/api/products");
-    setProducts(data.products || []); // lấy đúng mảng products
+    setProducts(data.products || []); 
   } catch (err) {
     console.error(err);
     setProducts([]);

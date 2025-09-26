@@ -1,4 +1,3 @@
-// Footer.jsx
 import { Facebook, Instagram } from "lucide-react";
 
 export default function Footer() {

@@ -97,7 +97,7 @@ export const createProduct = async (req, res) => {
   try {
     const { name, price, description, category, subcategory, colors, stock } = req.body;
 
-    const weaviateId = uuidv4(); // Tạo UUID mới cho sản phẩm
+    const weaviateId = uuidv4(); 
 
     const newProduct = new Product({
       name,
@@ -113,7 +113,7 @@ export const createProduct = async (req, res) => {
 
     const savedProduct = await newProduct.save();
 
-    // 🟢 Thêm vào Weaviate
+    //  Thêm vào Weaviate
     await client.data
       .creator()
       .withClassName("Product")
@@ -164,7 +164,7 @@ export const updateProduct = async (req, res) => {
     if (!updatedProduct)
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
 
-    // 🟢 Đồng bộ lên Weaviate
+    //  Đồng bộ lên Weaviate
     await client.data
       .updater()
       .withClassName("Product")
@@ -192,7 +192,7 @@ export const deleteProduct = async (req, res) => {
     if (!deletedProduct)
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     
-    // 🟢 Xóa trong Weaviate
+    //  Xóa trong Weaviate
     await client.data
       .deleter()
       .withClassName("Product")
@@ -227,7 +227,6 @@ export const decreaseStock = async (req, res) => {
 
     const { items } = req.body;
 
-    // Kiểm tra đủ số lượng cho từng size
     for (let item of items) {
       const stockItem = product.stock.find((s) => s.size === item.size);
       if (!stockItem)
@@ -249,7 +248,7 @@ export const decreaseStock = async (req, res) => {
 
     await product.save();
 
-    // 🟢 Cập nhật stock trong Weaviate
+    //  Cập nhật stock trong Weaviate
     await client.data
       .updater()
       .withClassName("Product")
@@ -266,8 +265,7 @@ export const decreaseStock = async (req, res) => {
   }
 };
 
-// Lấy category, subcategory, colors, giá min/max
-// Lấy tất cả filters từ database
+// Lấy dữ liệu lọc
 export const getFilters = async (req, res) => {
   try {
     const categories = await Product.distinct("category");

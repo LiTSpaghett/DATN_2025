@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../components/UserContext"; // import UserContext
+import { UserContext } from "../components/UserContext"; 
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -9,7 +9,7 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { login } = useContext(UserContext); // lấy hàm login từ context
+  const { login } = useContext(UserContext); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,11 +24,10 @@ export default function AdminLogin() {
         return;
       }
 
-      // Lưu vào context (context sẽ lo localStorage luôn)
       login(data);
 
       // chuyển hướng vào dashboard
-      navigate("/admin");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "❌ Lỗi đăng nhập admin");
     }

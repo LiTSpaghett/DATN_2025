@@ -23,24 +23,21 @@ const orderSchema = new mongoose.Schema(
       city:     { type: String, required: true },
     },
 
-    // Tổng tiền tại thời điểm đặt hàng
     totalPrice: { type: Number, required: true },
 
-    // Trạng thái xử lý đơn (logistics)
     status: {
       type: String,
       enum: ["Chờ xử lý", "Đã xác nhận", "Đang giao", "Đã giao", "Đã hủy"],
       default: "Chờ xử lý",
     },
-    // Phương thức thanh toán
+   
     paymentMethod: {
       type: String,
       enum: ["COD", "MOMO"],
       default: "COD",
       required: true,
     },
-
-    // Trạng thái thanh toán
+    
     paymentStatus: {
       type: String,
       enum: ["unpaid", "pending", "paid", "failed", "refunded"],
@@ -48,13 +45,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Thời điểm thanh toán xong
+ 
     paidAt: { type: Date },
 
-    // Mã giao dịch từ cổng thanh toán
     transactionId: { type: String },
 
-    // Thông tin chi tiết từ cổng thanh toán (để đối soát/debug)
     paymentInfo: {
       provider:  { type: String }, 
       payType:   { type: String }, 
@@ -67,12 +62,10 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Virtual tiện dụng
 orderSchema.virtual("isPaid").get(function () {
   return this.paymentStatus === "paid";
 });
 
-// Index phục vụ truy vấn/thống kê
 orderSchema.index({ createdAt: 1 });
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1, createdAt: 1 });

@@ -1,4 +1,3 @@
-// routes/orderRoutes.js
 import express from "express";
 import { createOrder, getMyOrders, getAllOrders, updateOrderStatus } from "../controllers/orderController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";

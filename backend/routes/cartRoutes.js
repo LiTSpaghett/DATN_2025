@@ -5,7 +5,7 @@ import {
   removeFromCart,
   updateQuantity,
 } from "../controllers/cartController.js";
-import { protect } from "../middleware/authMiddleware.js"; // middleware xác thực user
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

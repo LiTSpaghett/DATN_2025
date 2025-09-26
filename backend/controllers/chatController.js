@@ -6,15 +6,13 @@ import axios from "axios";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-// Detect category via keyword first
+
 async function detectCategorySubColorPrice(message) {
   try {
-    //  Gọi API filters từ backend
     const { data: filters } = await axios.get("http://localhost:5000/api/products/filters");
 
     const { categories, subcategories, colors, minPrice, maxPrice } = filters;
 
-    // Build prompt động
     const prompt = `
 Người dùng vừa hỏi: "${message}".
 
@@ -35,7 +33,6 @@ Chỉ trả về JSON đúng format:
 {"category": null, "subcategory": null, "color": null, "minPrice": null, "maxPrice": null}
     `;
 
-    //  Gọi GPT detect
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
@@ -53,12 +50,10 @@ export const chatWithAI = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Detect category, subcategory, color, price
     const { category, subcategory, color, minPrice, maxPrice } =
       await detectCategorySubColorPrice(message);
     console.log("🔎 Detected:", { category, subcategory, color, minPrice, maxPrice });
 
-    // Nếu không hỏi sản phẩm → trả lời GPT bình thường
     if (!category && !subcategory && !color && !minPrice && !maxPrice) {
       const gptRes = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -70,7 +65,6 @@ export const chatWithAI = async (req, res) => {
       return res.json({ type: "chat", reply: gptRes.choices[0].message.content });
     }
 
-    // 🔹 Chuẩn bị filter chính xác
     const operands = [];
     if (category) operands.push({ path: ["category"], operator: "Equal", valueText: category });
     if (subcategory) operands.push({ path: ["subcategory"], operator: "Equal", valueText: subcategory });
@@ -80,7 +74,6 @@ export const chatWithAI = async (req, res) => {
     if (operands.length === 1) whereFilter = operands[0];
     else if (operands.length > 1) whereFilter = { operator: "And", operands };
 
-    // 🔹 Xây query
     let query = client.graphql
       .get()
       .withClassName("Product")
@@ -88,17 +81,14 @@ export const chatWithAI = async (req, res) => {
       .withLimit(5);
 
     if (whereFilter) {
-      // Nếu detect được → lọc bằng where
       query = query.withWhere(whereFilter);
     } else {
-      // Nếu không detect được → fallback semantic
       query = query.withNearText({ concepts: [message] });
     }
 
     const weaviateRes = await query.do();
     let products = weaviateRes.data.Get.Product || [];
 
-    // 🔹 Lọc thêm theo giá
     if (products.length > 0 && (minPrice || maxPrice)) {
       products = products.filter((p) => {
         const price = p.price || 0;
@@ -108,7 +98,6 @@ export const chatWithAI = async (req, res) => {
       });
     }
 
-    // Nếu có sản phẩm
     if (products.length > 0) {
       const weaviateIds = products.map((p) => p._additional.id);
       const mongoProducts = await Product.find({ weaviateId: { $in: weaviateIds } });
@@ -123,7 +112,6 @@ export const chatWithAI = async (req, res) => {
       });
     }
 
-    // 🔹 Nếu không có → fallback GPT
     const gptRes = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [

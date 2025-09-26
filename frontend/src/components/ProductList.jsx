@@ -8,7 +8,7 @@ export default function ProductList({ addToCart, searchTerm = "", filters = {} }
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const limit = 8; // số sản phẩm / trang
+  const limit = 8; 
 
   useEffect(() => {
     const fetchProducts = async () => {

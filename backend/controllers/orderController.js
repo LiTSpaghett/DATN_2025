@@ -31,16 +31,15 @@ export const createOrder = async (req, res) => {
 
     // Chụp snapshot items
     const orderItems = cart.items.map((item) => ({
-      product: item.product._id,  // chỉ lưu productId
+      product: item.product._id,  
       quantity: item.quantity,
       size: item.size || null,
-      price: item.product.price,  // snapshot giá tại thời điểm đặt
+      price: item.product.price,  
     }));
 
-    // Tính tổng
+  
     const totalPrice = orderItems.reduce((sum, it) => sum + it.price * it.quantity, 0);
-
-    // Thiết lập trạng thái thanh toán ban đầu theo phương thức
+   
     const initialPaymentStatus = paymentMethod === "MOMO" ? "pending" : "unpaid";
 
     // Tạo order
@@ -49,9 +48,9 @@ export const createOrder = async (req, res) => {
       shippingAddress,
       orderItems,
       totalPrice,
-      paymentMethod,            // ví dụ: COD/MOMO
-      paymentStatus: initialPaymentStatus, // 'pending' nếu MOMO, 'unpaid' nếu COD
-      // transactionId/payedAt/paymentInfo sẽ được cập nhật sau (IPN/return)
+      paymentMethod,            
+      paymentStatus: initialPaymentStatus, 
+  
     });
 
     await order.save();
@@ -94,7 +93,7 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-// Admin: Cập nhật trạng thái logistics (không phải thanh toán)
+// Admin: Cập nhật trạng thái đơn hàng
 export const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;

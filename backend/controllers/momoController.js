@@ -3,40 +3,35 @@ import crypto from "crypto";
 import axios from "axios";
 import Order from "../models/Order.js";
 
-/**
- * POST /api/payments/momo/create
- * body: { orderId: string }  // _id của Order trong DB
- * return: { payUrl, momo }
- */
+
 export const createMomoPayment = async (req, res) => {
   try {
     const { orderId } = req.body || {};
     if (!orderId) return res.status(400).json({ message: "Thiếu orderId" });
 
-    // 1) Lấy đơn hàng từ DB (nếu có auth, bạn có thể filter thêm { user: req.user._id })
+   
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
 
-    // 2) Tham số môi trường MoMo
-    const partnerCode = process.env.MOMO_PARTNER_CODE;
+    
     const accessKey   = process.env.MOMO_ACCESS_KEY;
     const secretkey   = process.env.MOMO_SECRET_KEY;
     const endpoint    = process.env.MOMO_ENDPOINT_CREATE;
     const redirectUrl = process.env.MOMO_REDIRECT_URL ;
     const ipnUrl      = process.env.MOMO_IPN_URL ;
 
-    // 3) Lấy amount & orderInfo từ Order
-    const amountInt   = Math.max(0, Math.floor(order.totalPrice || 0)); // VND integer
+   
+    const amountInt   = Math.max(0, Math.floor(order.totalPrice || 0)); 
     const amountStr   = String(amountInt);
     const orderInfo   = `Thanh toán đơn #${order._id}`;
 
-    // 4) requestId/orderId theo mẫu MoMo
+    
     const requestId   = partnerCode + Date.now();
-    const momoOrderId = String(order._id); // gửi chính _id làm orderId cho MoMo
+    const momoOrderId = String(order._id); 
     const requestType = "captureWallet";
     const extraData   = "";
 
-    // 5) rawSignature (GIỮ ĐÚNG THỨ TỰ)
+    
     const rawSignature =
       "accessKey=" + accessKey +
       "&amount=" + amountStr +
@@ -53,7 +48,7 @@ export const createMomoPayment = async (req, res) => {
       .update(rawSignature)
       .digest("hex");
 
-    // 6) Payload và gọi MoMo
+   
     const payload = {
       partnerCode, accessKey, requestId,
       amount: amountStr, orderId: momoOrderId, orderInfo,
@@ -67,16 +62,16 @@ export const createMomoPayment = async (req, res) => {
       validateStatus: () => true,
     });
 
-    // 7) Nếu tạo thành công → lưu trạng thái đơn và trả payUrl
+    
     if (data?.resultCode === 0 && data?.payUrl) {
       order.paymentMethod = "MOMO";
-      order.paymentStatus = "pending"; // chờ MoMo xác nhận qua IPN
+      order.paymentStatus = "pending"; 
       order.paymentInfo = {
         ...(order.paymentInfo || {}),
         provider: "MOMO",
         requestId,
         orderIdPG: momoOrderId,
-        response: data, // optional: lưu để đối soát
+        response: data, 
       };
       await order.save();
 
@@ -94,7 +89,7 @@ export const createMomoPayment = async (req, res) => {
   }
 };
 
-// POST /api/payments/momo/ipn
+
 export const momoIpnHandler = async (req, res) => {
   try {
     const body = req.body || {};
@@ -104,7 +99,7 @@ export const momoIpnHandler = async (req, res) => {
       transId, payType,
     } = body;
 
-    // Verify chữ ký theo đúng format đã ký khi gửi đi
+    
     const raw =
       "accessKey=" + accessKey +
       "&amount=" + amount +
@@ -122,11 +117,11 @@ export const momoIpnHandler = async (req, res) => {
       .digest("hex");
 
     if (expected !== signature) {
-      // vẫn trả 200 để MoMo không retry quá nhiều, nhưng báo nhận biết lỗi
+      
       return res.json({ resultCode: 0, message: "Invalid signature (logged)" });
     }
 
-    // orderId chính là _id của Order
+    
     const order = await Order.findById(orderId);
     if (!order) {
       return res.json({ resultCode: 0, message: "Order not found (logged)" });

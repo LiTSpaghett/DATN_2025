@@ -5,10 +5,10 @@ const ProductForm = ({ product, onSuccess }) => {
   const [name, setName] = useState(product?.name || "");
   const [price, setPrice] = useState(product?.price || "");
   const [description, setDescription] = useState(product?.description || "");
-  const [colors, setColors] = useState(product?.colors || ""); // 1 màu chính
+  const [colors, setColors] = useState(product?.colors || ""); 
   const [category, setCategory] = useState(product?.category || "");
-  const [subcategory, setSubcategory] = useState(product?.subcategory || ""); // ✅ thêm subcategory
-  const [images, setImages] = useState([]); // nhiều ảnh
+  const [subcategory, setSubcategory] = useState(product?.subcategory || ""); 
+  const [images, setImages] = useState([]); 
   const [stock, setStock] = useState(
     product?.stock || [
       { size: "S", quantity: 0 },
@@ -18,7 +18,6 @@ const ProductForm = ({ product, onSuccess }) => {
     ]
   );
 
-  // Thay đổi số lượng theo size
   const handleStockChange = (index, value) => {
     const updatedStock = [...stock];
     updatedStock[index].quantity = Number(value);
@@ -33,8 +32,8 @@ const ProductForm = ({ product, onSuccess }) => {
       formData.append("price", price);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("subcategory", subcategory); // ✅ thêm subcategory
-      formData.append("colors", colors); // ✅ string, không JSON
+      formData.append("subcategory", subcategory); 
+      formData.append("colors", colors); 
       formData.append("stock", JSON.stringify(stock));
 
       // nhiều ảnh

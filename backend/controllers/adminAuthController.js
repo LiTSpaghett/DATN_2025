@@ -58,13 +58,13 @@ export const changeUserRole = async (req, res) => {
     const { id } = req.params;          
     const { isAdmin } = req.body;      
 
-    // Tìm user
+    
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
 
-    // Cập nhật role
+    
     user.isAdmin = isAdmin;
     await user.save();
 

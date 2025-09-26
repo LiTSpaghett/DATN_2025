@@ -1,88 +1,3 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-
-// export default function CheckoutPage() {
-//   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-//   const navigate = useNavigate();
-//   const [fullName, setFullName] = useState("");
-//   const [phone, setPhone] = useState("");
-//   const [address, setAddress] = useState("");
-//   const [city, setCity] = useState("");
-
-//   const handleCheckout = async () => {
-//     if (!fullName || !phone || !address || !city) {
-//       alert("Vui lòng điền đầy đủ thông tin giao hàng");
-//       return;
-//     }
-
-//     try {
-//       const { data } = await axios.post(
-//         "http://localhost:5000/api/orders",
-//         {
-//           shippingAddress: { fullName, phone, address, city },
-//         },
-//         { headers: { Authorization: `Bearer ${userInfo.token}` } }
-//       );
-
-//       alert("Đặt hàng thành công!");
-//       console.log("Order:", data);
-//       navigate("/orderTracking");
-//     } catch (err) {
-//       console.error(err);
-//       alert("Đặt hàng thất bại");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-2xl mx-auto bg-white shadow rounded-lg p-6">
-//       <h2 className="text-2xl font-bold mb-6">Thông tin giao hàng</h2>
-
-//       <div className="space-y-4">
-//         <input
-//           type="text"
-//           placeholder="Họ và tên"
-//           value={fullName}
-//           onChange={(e) => setFullName(e.target.value)}
-//           className="w-full border rounded px-3 py-2"
-//         />
-
-//         <input
-//           type="text"
-//           placeholder="Số điện thoại"
-//           value={phone}
-//           onChange={(e) => setPhone(e.target.value)}
-//           className="w-full border rounded px-3 py-2"
-//         />
-
-//         <input
-//           type="text"
-//           placeholder="Địa chỉ"
-//           value={address}
-//           onChange={(e) => setAddress(e.target.value)}
-//           className="w-full border rounded px-3 py-2"
-//         />
-
-//         <input
-//           type="text"
-//           placeholder="Thành phố"
-//           value={city}
-//           onChange={(e) => setCity(e.target.value)}
-//           className="w-full border rounded px-3 py-2"
-//         />
-
-//         <button
-//           onClick={handleCheckout}
-//           className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
-//         >
-//           Đặt hàng
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -96,8 +11,7 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
 
-  // phương thức thanh toán
-  const [paymentMethod, setPaymentMethod] = useState("COD"); // "COD" | "MOMO"
+  const [paymentMethod, setPaymentMethod] = useState("COD"); 
   const [submitting, setSubmitting] = useState(false);
 
   const handleCheckout = async () => {
@@ -113,37 +27,34 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
-      // 1) Tạo đơn hàng (kèm paymentMethod)
+      
       const createRes = await axios.post(
         "http://localhost:5000/api/orders",
         {
           shippingAddress: { fullName, phone, address, city },
-          paymentMethod, // <-- thêm vào body
+          paymentMethod, 
         },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );
 
       const order = createRes.data;
-
-      // 2) Nếu MoMo → tạo phiên thanh toán và redirect
       if (paymentMethod === "MOMO") {
         const payRes = await axios.post(
           "http://localhost:5000/api/payments/momo/create",
           { orderId: order._id },
           { headers: { Authorization: `Bearer ${userInfo.token}` } }
         );
-        // MoMo trả payUrl → redirect
         if (payRes.data?.payUrl) {
           window.location.href = payRes.data.payUrl;
-          return; // dừng ở đây
+          return; 
         } else {
           alert("Không tạo được phiên thanh toán MoMo.");
           console.error("MoMo create error:", payRes.data);
         }
       } else {
-        // 3) COD → điều hướng ngay tới theo dõi đơn
+       
         alert("Đặt hàng thành công!");
-        navigate("/ordertracking"); // hoặc navigate(`/orders/${order._id}`)
+        navigate("/ordertracking"); 
       }
     } catch (err) {
       console.error(err);

@@ -23,13 +23,11 @@ export const addToCart = async (req, res) => {
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
-      // Tạo giỏ hàng mới nếu chưa có
       cart = new Cart({
         user: req.user._id,
         items: [{ product: productId, quantity, size }],
       });
     } else {
-      // Kiểm tra sản phẩm + size đã có trong giỏ chưa
       const itemIndex = cart.items.findIndex(
         (item) => item.product.toString() === productId && item.size === size
       );

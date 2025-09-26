@@ -22,7 +22,7 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  // 🗑 Xóa user
+
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa?")) return;
 
@@ -41,12 +41,12 @@ const Users = () => {
     }
   };
 
-  // 🔄 Đổi role user
+
   const handleChangeRole = async (id, isAdmin) => {
     try {
       await axios.put(
         `http://localhost:5000/api/admin/auth/${id}/role`,
-        { isAdmin }, // boolean true/false
+        { isAdmin }, 
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -78,7 +78,7 @@ const Users = () => {
             <td className="p-2 border">{user.email}</td>
             <td className="p-2 border">
               <select
-                value={user.isAdmin ? "true" : "false"} // hiển thị từ boolean → string
+                value={user.isAdmin ? "true" : "false"} 
                 onChange={(e) => handleChangeRole(user._id, e.target.value === "true")}
                 className="border rounded px-2 py-1"
               >
